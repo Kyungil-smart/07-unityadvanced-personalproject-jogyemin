@@ -6,8 +6,29 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/MapSpawner.unity
+    guid: 1610bfe1660943b4f91326a0ef9d4866
+  - enabled: 1
+    path: Assets/Scenes/MapSpawner 1.unity
+    guid: 439b3de0712ce954589663a33dd2aba9
+  - enabled: 1
+    path: Assets/Scenes/MapSpawner 2.unity
+    guid: e97eae515e4ff16449413983bfeb8ec9
+  - enabled: 1
+    path: Assets/Scenes/MapSpawner 3.unity
+    guid: e6ed0669becbc11478b63482f3070a89
+  - enabled: 1
+    path: Assets/Scenes/MapSpawner 4.unity
+    guid: 3e3799faaf38d6d419a9d1abefc0cd06
+  - enabled: 1
+    path: Assets/Scenes/MapSpawner 5.unity
+    guid: 80e5fdf4c0ebaf348942925d6d3bcc21
+  - enabled: 1
+    path: Assets/Scenes/MapSpawner 6.unity
+    guid: c0c0584c569480d469746c7e0cfa501f
+  - enabled: 1
+    path: Assets/Scenes/MapSpawner 7.unity
+    guid: af12ad17832e98f4cabc05eb7075d641
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
