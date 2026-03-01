@@ -7,17 +7,14 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [Header("스테이지 설정")]
-
-    [Tooltip("총 스테이지 수 (고정 8)")]
+    [Tooltip("최종 스테이지 번호 (8이면 8에서 클리어)")]
     [SerializeField] private int maxStage = 8;
 
-    [Tooltip("현재 진행 중인 스테이지 번호")]
-    [SerializeField] private int currentStage = 1;
-
-    [Tooltip("이번 스테이지에 이상현상이 존재하는지 여부")]
+    [Tooltip("이번 스테이지에 이상현상이 존재하는지 여부 (읽기 전용)")]
     [SerializeField] private bool hasAnomaly;
 
-    public int CurrentStage => currentStage;
+    [SerializeField] private AnomalySystem anomalySystem;
+
     public bool HasAnomaly => hasAnomaly;
 
     private void Awake()
@@ -33,44 +30,87 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 🔥 새 씬에서 AnomalySystem 다시 찾기
+        anomalySystem = FindObjectOfType<AnomalySystem>();
+
+        if (anomalySystem == null)
+            Debug.LogWarning("AnomalySystem을 찾지 못했습니다.");
+
         StartStage();
     }
 
+    // ==============================
+    // 스테이지 시작
+    // ==============================
     public void StartStage()
     {
+        int stage = StageManager.Instance.GetStage();
+
+        // 🔵 Stage 1 = 관찰 단계
+        if (stage == 1)
+        {
+            hasAnomaly = false;
+
+            Debug.Log("=== Stage 1 (관찰 단계) ===");
+
+            if (anomalySystem != null)
+                anomalySystem.ResetAll();   // 🔥 이상현상 적용하지 않음
+
+            return;
+        }
+
+        // 🔴 Stage 2 이상부터 랜덤
         hasAnomaly = Random.value > 0.5f;
 
-        Debug.Log("=== 스테이지 시작 ===");
-        Debug.Log("현재 스테이지: " + currentStage);
-        Debug.Log("이상현상 존재 여부: " + hasAnomaly);
+        Debug.Log("=== Stage " + stage + " 시작 ===");
+        Debug.Log("이상현상 존재 여부: " + (hasAnomaly ? "있음" : "없음"));
+
+        if (anomalySystem != null)
+            anomalySystem.ApplyStageAnomaly(hasAnomaly);
     }
 
+    // ==============================
+    // 플레이어 선택 평가
+    // ==============================
     public void EvaluateChoice(bool playerChoseAnomalyDoor)
     {
+        int stage = StageManager.Instance.GetStage();
+
         bool success =
             (hasAnomaly && playerChoseAnomalyDoor) ||
             (!hasAnomaly && !playerChoseAnomalyDoor);
 
         if (success)
         {
-            currentStage++;
+            StageManager.Instance.CorrectAnswer();
+            int nextStage = StageManager.Instance.GetStage();
 
-            if (currentStage > maxStage)
+            Debug.Log("성공 → 다음 스테이지: " + nextStage);
+
+            if (nextStage > maxStage)
             {
-                Debug.Log("게임 클리어!");
-                currentStage = 1; // 클리어 후 초기화
+                Debug.Log("게임 클리어");
+                StageManager.Instance.SetStage(1);
                 ReloadStage();
                 return;
             }
-
-            Debug.Log("성공! 다음 스테이지: " + currentStage);
         }
         else
         {
-            Debug.Log("실패! 스테이지 1로 리셋");
-            currentStage = 1;
+            Debug.Log("실패 → Stage 1로 리셋");
+            StageManager.Instance.SetStage(1);
         }
 
         ReloadStage();
@@ -78,6 +118,7 @@ public class GameManager : MonoBehaviour
 
     private void ReloadStage()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(
+            SceneManager.GetActiveScene().name);
     }
 }
