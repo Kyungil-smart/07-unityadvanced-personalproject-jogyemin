@@ -27,8 +27,13 @@ public class AnomalyObject : MonoBehaviour
     [Tooltip("크기 감소 배율")]
     [SerializeField] private float scaleDownMultiplier = 0.5f;
 
-    [Tooltip("Blink 반복 간격(초)")]
-    [SerializeField] private float blinkInterval = 2f;
+    [Header("===== Blink 세부 설정 =====")]
+
+    [Tooltip("보이다가 사라지기까지 대기 시간 (초)")]
+    [SerializeField] private float blinkVisibleDuration = 2f;
+
+    [Tooltip("사라져 있는 시간 (이 시간이 지나면 다시 등장)")]
+    [SerializeField] private float blinkHiddenDuration = 1f;
 
     private bool defaultActiveState;
     private Vector3 defaultScale;
@@ -128,18 +133,20 @@ public class AnomalyObject : MonoBehaviour
     }
 
     // ===============================
-    // Blink 코루틴
+    // Blink 코루틴 (등장 타이밍 조절 가능)
     // ===============================
     private IEnumerator BlinkRoutine()
     {
         while (true)
         {
-            yield return new WaitForSeconds(blinkInterval);
+            // 보이는 상태 유지 시간
+            yield return new WaitForSeconds(blinkVisibleDuration);
 
             SetVisible(false);
             Debug.Log($"{gameObject.name} → 사라짐");
 
-            yield return new WaitForSeconds(1f);
+            // 사라져 있는 시간 (이 시간 후 다시 등장)
+            yield return new WaitForSeconds(blinkHiddenDuration);
 
             SetVisible(true);
             Debug.Log($"{gameObject.name} → 다시 나타남");

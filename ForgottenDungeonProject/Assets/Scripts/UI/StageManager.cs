@@ -7,11 +7,17 @@ public class StageManager : MonoBehaviour
 {
     public static StageManager Instance;
 
-    [Header("UI 참조")]
-    [Tooltip("우측 상단에 표시될 Stage 텍스트")]
-    public TextMeshProUGUI stageText;
+    [Header("===== UI 설정 =====")]
+    [Tooltip("Hierarchy에 있는 'StageText' 오브젝트를 자동으로 찾습니다.")]
+    [SerializeField] private TextMeshProUGUI stageText;
 
-    private int currentStage = 1;   // 🔥 기본값 1
+    [Header("===== 현재 스테이지 =====")]
+    [Tooltip("현재 진행 중인 스테이지 번호")]
+    [SerializeField] private int currentStage = 0;
+
+    [Header("===== 최대 스테이지 =====")]
+    [Tooltip("최대 스테이지 번호 (예: 8)")]
+    [SerializeField] private int maxStage = 8;
 
     private void Awake()
     {
@@ -38,16 +44,18 @@ public class StageManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (stageText == null)
-            stageText = FindStageText();
+        // 🔥 정확히 StageText 이름으로 찾기
+        stageText = FindStageTextByName();
 
         UpdateUI();
     }
 
-    private TextMeshProUGUI FindStageText()
+    private TextMeshProUGUI FindStageTextByName()
     {
         TextMeshProUGUI[] allTexts =
-            FindObjectsOfType<TextMeshProUGUI>(true);
+            Object.FindObjectsByType<TextMeshProUGUI>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
 
         foreach (var txt in allTexts)
         {
@@ -55,31 +63,31 @@ public class StageManager : MonoBehaviour
                 return txt;
         }
 
-        Debug.LogWarning("StageText를 찾지 못했습니다.");
+        Debug.LogWarning("StageText를 찾지 못했습니다. 이름을 정확히 확인하세요.");
         return null;
     }
 
     private void UpdateUI()
     {
-        if (stageText == null) return;
-        stageText.text = "Stage " + currentStage;
+        if (stageText != null)
+        {
+            stageText.text = "Stage " + currentStage;
+        }
     }
 
     public void CorrectAnswer()
     {
-        currentStage++;
-        UpdateUI();
-    }
+        if (currentStage < maxStage)
+        {
+            currentStage++;
+        }
 
-    public void WrongAnswer()
-    {
-        currentStage = 1;   // 0이 아니라 1
         UpdateUI();
     }
 
     public void SetStage(int value)
     {
-        currentStage = Mathf.Max(1, value);   // 최소 1 보장
+        currentStage = Mathf.Clamp(value, 0, maxStage);
         UpdateUI();
     }
 
