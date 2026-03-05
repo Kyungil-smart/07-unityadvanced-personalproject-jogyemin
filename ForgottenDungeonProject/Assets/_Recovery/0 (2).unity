@@ -686,7 +686,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 45f5d9a477a68b5438f484821bdfcd52, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 00223cbc31fb9984b945917c763c6f9b, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1135,9 +1135,9 @@ RectTransform:
   - {fileID: 5868413}
   m_Father: {fileID: 310675961}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -113, y: 48}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -759, y: -575}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &803770300
@@ -1291,10 +1291,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: " \uC774\uC0C1\uD604\uC0C1 \uC5C6\uC73C\uC2E4 \uC2DC = \uC55E\uC5D0 \uBB38\r\n\r\n
-    \uC774\uC0C1\uD604\uC0C1 \uC788\uC73C\uC2E4 \uC2DC = \uB4A4\uC5D0 \uBB38\r\n\r\n
-    W S A D = \uC55E, \uB4A4, \uC88C, \uC6B0\r\n\r\n Shift = \uB2EC\uB9AC\uAE30\r\n\r\n
-    G\uD0A4 = \uBB38 \uC120\uD0DD "
+  m_text: "      W A S D = \uC55E, \uC88C, \uB4A4, \uC6B0\n\r\n      Shift  = \uB2EC\uB9AC\uAE30\n\r\n     
+    G =  \uBB38 \uC120\uD0DD \r\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 00223cbc31fb9984b945917c763c6f9b, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1642,7 +1640,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 180, y: 50}
+  m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 1, y: 0}
 --- !u!1 &1151277868
 GameObject:
@@ -1803,8 +1801,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1893,7 +1891,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 180, y: 50}
+  m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1341619182
 MonoBehaviour:
@@ -2480,8 +2478,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3058,7 +3056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BGMManager
   bgmClip: {fileID: 8300000, guid: 034ae790a93f84d4a92134bb3c2b53a1, type: 3}
-  volume: 0.5
+  volume: 0.3
   loop: 1
 --- !u!4 &2106439612
 Transform:

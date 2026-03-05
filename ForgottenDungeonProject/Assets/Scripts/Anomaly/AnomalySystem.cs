@@ -1,14 +1,25 @@
 using UnityEngine;
+using System.Collections;
 
 public class AnomalySystem : MonoBehaviour
 {
     [Header("이상현상 오브젝트 목록")]
-    [Tooltip("이 목록 중에서 랜덤으로 하나만 이상현상이 적용됩니다.")]
     [SerializeField] private AnomalyObject[] anomalyObjects;
 
-    // ==============================
-    // 관찰 단계 (Stage 1)
-    // ==============================
+    [Header("지진 이상현상")]
+    [SerializeField] private CameraShakeAnomaly earthquake;
+
+    [Header("암전 점프스케어 이벤트")]
+    [Tooltip("암전 + 점프스케어 이벤트 매니저")]
+    [SerializeField] private DarkEventManager darkEvent;
+
+    [Header("지진 등장 시간 설정")]
+    [Tooltip("지진 최소 등장 시간")]
+    [SerializeField] private float earthquakeDelayMin = 3f;
+
+    [Tooltip("지진 최대 등장 시간")]
+    [SerializeField] private float earthquakeDelayMax = 12f;
+
     public void ResetAll()
     {
         foreach (var obj in anomalyObjects)
@@ -19,12 +30,8 @@ public class AnomalySystem : MonoBehaviour
         Debug.Log("관찰 단계: 이상현상 없음 (기본 상태 유지)");
     }
 
-    // ==============================
-    // 스테이지 이상현상 적용
-    // ==============================
     public void ApplyStageAnomaly(bool hasAnomaly)
     {
-        // 먼저 전부 기본 상태로 초기화
         foreach (var obj in anomalyObjects)
         {
             obj.ResetToDefault();
@@ -36,21 +43,48 @@ public class AnomalySystem : MonoBehaviour
             return;
         }
 
-        if (anomalyObjects.Length == 0)
+        // 오브젝트 + 지진 + 암전 이벤트
+        int totalAnomalyCount = anomalyObjects.Length + 2;
+
+        int randomIndex = Random.Range(0, totalAnomalyCount);
+
+        // 1️⃣ 오브젝트 이상현상
+        if (randomIndex < anomalyObjects.Length)
         {
-            Debug.LogWarning("AnomalyObject가 등록되지 않았습니다.");
-            return;
+            AnomalyObject selected = anomalyObjects[randomIndex];
+
+            Debug.Log("이상현상 발생 오브젝트: " + selected.name);
+
+            selected.ApplyAnomaly(true);
         }
 
-        // 🔥 랜덤으로 하나 선택
-        int randomIndex = Random.Range(0, anomalyObjects.Length);
-        AnomalyObject selected = anomalyObjects[randomIndex];
+        // 2️⃣ 지진
+        else if (randomIndex == anomalyObjects.Length)
+        {
+            Debug.Log("이상현상 발생: 지진 예정");
 
-        Debug.Log("이상현상 발생 오브젝트: " + selected.name);
+            StartCoroutine(StartEarthquakeDelayed());
+        }
 
-        // 🔥 선택된 하나만 이상현상 적용
-        selected.ApplyAnomaly(true);
+        // 3️⃣ 암전 점프스케어
+        else
+        {
+            Debug.Log("이상현상 발생: 암전 점프스케어");
 
-        Debug.Log("현재 스테이지 이상현상: 있음 (1개만 적용)");
+            if (darkEvent != null)
+                darkEvent.StartDarkEvent();
+        }
+    }
+
+    IEnumerator StartEarthquakeDelayed()
+    {
+        float delay = Random.Range(earthquakeDelayMin, earthquakeDelayMax);
+
+        Debug.Log("지진 발생 예정 시간: " + delay + "초");
+
+        yield return new WaitForSeconds(delay);
+
+        if (earthquake != null)
+            earthquake.StartEarthquake();
     }
 }

@@ -155,7 +155,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            StageManager.Instance.SetStage(1);
+            StageManager.Instance.SetStage(0);
             ReloadStage();
         }
     }
